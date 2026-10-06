@@ -7,8 +7,6 @@
 |---|---|---|
 | Đỗ Trình Huy Hoàng | 2A202602392 | Toàn bộ (bài làm cá nhân) |
 
-> Bảng này được điền suy ra từ tên kho `HuyHoang1977/K4-DAY20-MULTIAGENTS-DoTrinhHuyHoang-2A202602392` và tên thư mục làm việc. **Nhóm kiểm lại và sửa nếu sai.**
-
 - Mô hình: `LAB_MODEL=google_genai:gemini-3.5-flash-lite` (Gemini API, free tier), `LAB_TEMPERATURE=0`, `recursion_limit=60` (mặc định của `lab.runner`, không đổi).
 - Phiên bản Deep Agents: **0.7.21** (`pip show deepagents`). Hệ điều hành: **Microsoft Windows 11 Pro**, Python 3.12.10 trong venv ảo `.venv`, **chạy trực tiếp, không dùng Docker**.
 - Số lần chạy tác vụ đã dùng: **21 lần chạy** được ghi lại trong `results/` (6 baseline + 6 subagents + 6 skills-auto chính thức, cộng 3 lần chạy lại do lỗi). Tổng token tiêu thụ trên các lần chạy chính thức (18 run sạch): khoảng **5,2 triệu token**. Ngân sách: Gemini free tier — đã phải chạy lại 1 lần do `503` và 1 lần do `GraphRecursionError`.
