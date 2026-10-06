@@ -1,21 +1,21 @@
 # Báo cáo Lab: Self evolving Agentic
 
-> Sao chép tệp này thành `report/REPORT.md` (đã làm ở Phần 0) và điền dần qua các Phần của lab. Xóa các dòng hướng dẫn dạng trích dẫn (bắt đầu bằng `>`). Văn phong kỹ thuật, ngắn gọn, mọi nhận định đi kèm số liệu hoặc bằng chứng. Trong buổi học: điền mục 1 đến 7 (bản nháp). Sau buổi học: hoàn thiện mục 8 đến 10.
 
 ## 1. Thông tin nhóm và cấu hình
 
 | Họ tên | Mã sinh viên | Phần đóng góp |
 |---|---|---|
-| | | |
+| *(để trống: nhóm chưa điền)* | | |
 
-- Mô hình (tên deployment hoặc `LAB_MODEL`), nhiệt độ (`LAB_TEMPERATURE`), `recursion_limit`:
-- Phiên bản Deep Agents (`pip show deepagents`), hệ điều hành, chạy trực tiếp hay trong Docker:
-- Số lần chạy tác vụ đã dùng / ngân sách:
-- Commit của tag `freeze`:
+- Mô hình: `LAB_MODEL=google_genai:gemini-3.5-flash-lite` (Gemini API, free tier), `LAB_TEMPERATURE=0`, `recursion_limit=60` (mặc định của `lab.runner`, không đổi).
+- Phiên bản Deep Agents: **0.7.21** (`pip show deepagents`). Hệ điều hành: **Microsoft Windows 11 Pro**, Python 3.12.10 trong venv ảo `.venv`, **chạy trực tiếp, không dùng Docker**.
+- Số lần chạy tác vụ đã dùng: **21 lần chạy** được ghi lại trong `results/` (6 baseline + 6 subagents + 6 skills-auto chính thức, cộng 3 lần chạy lại do lỗi). Tổng token tiêu thụ trên các lần chạy chính thức (18 run sạch): khoảng **5,2 triệu token**. Ngân sách: Gemini free tier — đã phải chạy lại 1 lần do `503` và 1 lần do `GraphRecursionError`.
+- Commit của tag `freeze`: **`2f1898c`**; commit `hypotheses` ngay trước đó: `7b99415`. `verify_freeze.py` trả `OK` cho cả 6 run `skills-auto`.
+- Ba sửa đổi hạ tầng đã phải làm **trước khi** số liệu nào chạy được, tất cả nằm trong `src/lab/agent.py` và `src/lab/curator.py` (hàm của sinh viên), **không** đụng `BASE_PROMPT` hay `model.py` (phần đánh dấu "CÓ SẴN, KHÔNG SỬA"). Chi tiết ở Phụ lục mục 2 và 3.
+
 
 ## 2. Giả thuyết (commit TRƯỚC tag `freeze`, Phần 4.0)
 
-> Dự đoán điều kiện nào đạt điểm cao nhất trên **tác vụ đánh giá** và vì sao. Nêu căn cứ từ phân loại lỗi (mục 4) và từ tài liệu tham khảo. Điền cả ba dòng; `verify_freeze.py` kiểm tra điều này.
 
 - H1 (subagents so với baseline): Dự đoán **`subagents` đạt điểm trên tác vụ đánh giá ngang hoặc thấp hơn `baseline`**, không cải thiện có ý nghĩa. Căn cứ: (i) ở Phần 5, trên tác vụ học `subagents` cho 6/10 và 6/9 — y hệt `baseline` — trong khi tốn 2,2–3,7× token và 2–17× thời gian; (ii) phân loại lỗi ở Phần 4 cho thấy phần lớn lỗi là quy ước đầu ra (`rule_`) và đặc tả nằm ngay trong thư mục tác vụ, tức đều thuộc tầm tự nhiên của một tác tử đọc tệp rồi chạy lệnh, không đủ nặng để cắm búa; (iii) chi phí cố định của subagent rất lớn (mỗi lần giao là một lần gọi LLM mới, phải viết lại toàn bộ ngữ cảnh, không thừa hưởng hội thoại) trong khi điều kiện này không có `reviewer` chạy sau `implementer` để thu được lợi ích kiểm chứng. Tác vụ đánh giá là tác vụ một lượt như tác vụ học, nên không có lý do để lợi ích xuất hiện ở đây nếu không xuất hiện ở kia.
 - H2 (skills-auto so với baseline): Dự đoán **`skills-auto` không cải thiện điểm trên tác vụ đánh giá; nhiều khả năng bằng hoặc thấp hơn `baseline`**. Căn cứ: (i) ngay trên tác vụ học ở Phần 3.4, `skills-auto` cho đúng điểm `baseline` (6/10, 5/8, 6/9) và không một check nào chuyển từ đỏ sang xanh; (ii) nguyên nhân đã tách được ở Phần 6 là tác tử **không mở skill** ở hai tác vụ (`skills_read = 0`) và **đọc nhưng chỉ làm một phần** ở tác vụ còn lại — tức là khoảng cách không nằm ở chất lượng nội dung skill; (iii) `04_curator.md` dẫn SkillsBench: skill do người biên soạn tăng trung bình khoảng 16 điểm phần trăm, còn skill do mô hình tự sinh **trung bình không có lợi**, và dẫn SkillEvolBench: lợi ích trên tác vụ học thường không chuyển sang tác vụ mới (quá khớp). Hai skill giữ lại đều được sinh từ phản hồi `detail` của **tác vụ học**, mà theo `05_skill_quality.md` quy ước của task học và task đánh giá không chắc trùng nhau.
@@ -23,7 +23,6 @@
 
 ## 3. Làm quen Deep Agents (Phần 0.3)
 
-> Nguồn: `python scripts/tour.py` (chạy với model giả, 0 token). Trích nguyên văn mô tả công cụ.
 
 ### Câu 1: Tác tử mặc định có những công cụ nào? Công cụ nào cho phép chạy lệnh?
 
@@ -74,7 +73,7 @@ Nhận xét: vì system prompt rỗng, **mô tả công cụ chính là "system 
 
 ## 4. Đường cơ sở và phân loại lỗi (Phần 2.2)
 
-Cơ sở: điều kiện `baseline`, ba tác vụ học (`code-learn`, `data-learn`, `logs-learn`). Tổng 13 check thất bại trên 27 check.
+Cơ sở: điều kiện `baseline`, ba tác vụ học (`code-learn`, `data-learn`, `logs-learn`). Tổng **10** check thất bại trên 27 check (4 + 3 + 3).
 
 | Tác vụ | Check thất bại | Nhóm lỗi (A-G) | Bằng chứng (trích ngắn từ `detail` hoặc vết) |
 |---|---|---|---|
@@ -205,7 +204,6 @@ Không có check nào chuyển từ đỏ sang xanh. Đây là kết quả **ti�
 
 ## 7. Kết quả so sánh (Phần 4.3, 4.4)
 
-> Dán nội dung `report/table.md` và kết quả `python scripts/check_breakdown.py`. Nêu các lần chạy có `error` hoặc `skills_modified = true` (nếu có) và cách xử lý.
 
 ```text
 | Task | baseline | subagents | skills-auto |
@@ -272,7 +270,6 @@ Ghi chú về `skills-auto/code-learn`: lỗi này **tái hiện được**, kh�
 
 ## 9. Hạn chế và tính hợp lệ
 
-> Nêu ít nhất 3 hạn chế và ảnh hưởng của từng hạn chế đến kết luận (ví dụ: chỉ 3 tác vụ mỗi vai trò, mỗi cấu hình chạy một lần, nhiễu của mô hình, tác vụ do giảng viên thiết kế sẵn quy ước, chỉ một mô hình).
 
 1. **Mỗi cấu hình chỉ chạy MỘT lần, trong khi nhiễu đo được là ±1 điểm trên một tác vụ.** Mục 8.6 cho thấy cùng một bộ skill cho `code-learn` dao động 6/10 → 7/10 giữa hai lần chạy. Vì vậy không chênh lệch nào cỡ 1 điểm trong bảng mục 7 có thể kết luận được; người đọc có thể dễ dàng đảo ngược thứ hạng giữa `baseline` và `skills-auto` chỉ bằng một lần chạy lại. Ảnh hưởng: kết luận "không điều kiện nào cải thiện" phải dựa vào **khoảng cách có ý nghĩa** (điểm trung bình 0,57 so với 0,57; 3,3× token; 0/12 check quy ước), không dựa vào từng ô bảng.
 2. **Chỉ 3 tác vụ mỗi vai trò, và cả 6 tác vụ do giảng viên thiết kế sẵn với quy ước giống nhau.** Tổng số check quy ước toàn bộ thí nghiệm chỉ là 21 lần chấm, và cả 21 đều là cùng một loại quy tắc (định dạng đầu ra của Acme). Ảnh hưởng: kết luận "tác tử vô dụng về quy ước nhưng giỏi về kỹ thuật" có thể là đặc thù của bộ tác vụ này, không khái quát hoá được sang miền khác. Cũng không loại trừ được khả năng mô hình đã được huấn luyện đúng các quy ước này.
