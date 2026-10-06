@@ -1,4 +1,4 @@
-﻿| Task | baseline | subagents | skills-auto |
+| Task | baseline | subagents | skills-auto |
 |---|---|---|---|
 | code-learn | 6/10 | 6/10 | 7/10 |
 | data-learn | 5/8 | 3/8 | 5/8 |

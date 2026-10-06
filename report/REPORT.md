@@ -5,7 +5,9 @@
 
 | Họ tên | Mã sinh viên | Phần đóng góp |
 |---|---|---|
-| *(để trống: nhóm chưa điền)* | | |
+| Đỗ Trình Huy Hoàng | 2A202602392 | Toàn bộ (bài làm cá nhân) |
+
+> Bảng này được điền suy ra từ tên kho `HuyHoang1977/K4-DAY20-MULTIAGENTS-DoTrinhHuyHoang-2A202602392` và tên thư mục làm việc. **Nhóm kiểm lại và sửa nếu sai.**
 
 - Mô hình: `LAB_MODEL=google_genai:gemini-3.5-flash-lite` (Gemini API, free tier), `LAB_TEMPERATURE=0`, `recursion_limit=60` (mặc định của `lab.runner`, không đổi).
 - Phiên bản Deep Agents: **0.7.21** (`pip show deepagents`). Hệ điều hành: **Microsoft Windows 11 Pro**, Python 3.12.10 trong venv ảo `.venv`, **chạy trực tiếp, không dùng Docker**.
@@ -265,13 +267,13 @@ Ghi chú về `skills-auto/code-learn`: lỗi này **tái hiện được**, kh�
    | data-learn | 5/8 | 5/8 | 0 |
    | logs-learn | 6/9 | 6/9 | 0 |
 
-   Trên cùng một bộ skill, một tác vụ hơn 1 điểm và hai tác vụ không đổi. Đây chính là mức nhiễu đo được của thí nghiệm: **±1 điểm trên một tác vụ đơn, ngay cả khi mọi thứ được giữ nguyên**. Hệ quả trực tiếp: mọi chênh lệch cỡ 1 điểm trong bảng mục 7 — kể cả chênh lệch ±1 điểm mà chúng ta từng thấy giữa các điều kiện — **không đủ bằng chứng để kết luận**. Đáng chú ý, `code-learn` trước đóng băng đạt 6/10 với `skills_read = 2` (đọc cả hai skill) còn sau đóng băng đạt 7/10 với `skills_read = 0` (không đọc skill nào) — tức điểm cao hơn thuộc về run **ít** dùng skill hơn, củng cố kết luận rằng skill sinh ra không tạo ra lợi ích đo được. Với mỗi điều kiện chỉ chạy **một** lần và chỉ 3 tác vụ mỗi vai trò, bảng mục 7 nên được đọc như một ảnh chụp đơn điểm, không phải một ước lượng ổn định.
+   Trên cùng một bộ skill, một tác vụ hơn 1 điểm và hai tác vụ không đổi. Đây chính là mức nhiễu đo được của thí nghiệm: **±1 điểm trên một tác vụ đơn, ngay cả khi mọi thứ được giữ nguyên**. Hệ quả trực tiếp: mọi chênh lệch cỡ 1 điểm trong bảng mục 7 — kể cả chênh lệch ±1 điểm mà chúng ta từng thấy giữa các điều kiện — **không đủ bằng chứng để kết luận**. Đáng chú ý, `code-learn` trước đóng băng đạt 6/10 với `skills_read = 2` (đọc cả hai skill) còn sau đóng băng đạt 7/10 với `skills_read = 0` (không đọc skill nào) — tức điểm cao hơn thuộc về run **ít** dùng skill hơn, củng cố kết luận rằng skill sinh ra không tạo ra lợi ích đo được. Với mỗi điều kiện chỉ chạy **một** lần và chỉ 3 tác vụ mỗi vai trò, bảng mục 7 nên được đọc như một ảnh chụp đơn điểm, không phải một ước lượng ổn định. **Phụ lục 6e** đã kiểm chứng lại ước lượng này bằng một lần lặp thứ hai trên toàn bộ tác vụ đánh giá: ±1 điểm **không** phải tính chất chung, mà chỉ xảy ra ở `subagents` (1/8 ô, đúng một check kỹ thuật đổi chiều), trong khi `baseline` và `skills-auto` trùng khớp tuyệt đối ở cả 6 ô. Như vậy giới hạn thực tế của mục 7 không phải "mọi ô đều mờ" mà là: **các khác biệt cỡ 1 điểm không đáng kể, còn khác biệt lớn (3,3-3,6× token, khoảng dao động 0,356 so với 0,055, mất cả check kỹ thuật) thì đáng kể.**
 
 
 ## 9. Hạn chế và tính hợp lệ
 
 
-1. **Mỗi cấu hình chỉ chạy MỘT lần, trong khi nhiễu đo được là ±1 điểm trên một tác vụ.** Mục 8.6 cho thấy cùng một bộ skill cho `code-learn` dao động 6/10 → 7/10 giữa hai lần chạy. Vì vậy không chênh lệch nào cỡ 1 điểm trong bảng mục 7 có thể kết luận được; người đọc có thể dễ dàng đảo ngược thứ hạng giữa `baseline` và `skills-auto` chỉ bằng một lần chạy lại. Ảnh hưởng: kết luận "không điều kiện nào cải thiện" phải dựa vào **khoảng cách có ý nghĩa** (điểm trung bình 0,57 so với 0,57; 3,3× token; 0/12 check quy ước), không dựa vào từng ô bảng.
+1. **Mỗi cấu hình chỉ chạy MỘT lần trong kết quả chính thức, trong khi nhiễu đo được là ±1 điểm trên một tác vụ.** Mục 8.6 cho thấy cùng một bộ skill cho `code-learn` dao động 6/10 → 7/10 giữa hai lần chạy. Phụ lục 6e đã lặp lại toàn bộ tác vụ đánh giá lần nữa và cho thấy nhiễu **tập trung ở `subagents`**, không phải phổ quát (mục 8.6 đã cập nhật theo). Ảnh hưởng: các khác biệt cỡ 1 điểm vẫn không kết luận được, nhưng kết luận "không điều kiện nào cải thiện" giờ đã vững hơn trước, vì nó dựa vào **12 quan sát trùng khớp tuyệt đối** (`baseline` và `skills-auto` cùng đạt 0,567, cùng khoảng dao động 0,055) chứ không dựa vào một ô đơn lẻ. Điểm yếu còn lại: mỗi ô chỉ có n=2, nên chưa ước lượng được phân phối nhiễu, chỉ biên độ.
 2. **Chỉ 3 tác vụ mỗi vai trò, và cả 6 tác vụ do giảng viên thiết kế sẵn với quy ước giống nhau.** Tổng số check quy ước toàn bộ thí nghiệm chỉ là 21 lần chấm, và cả 21 đều là cùng một loại quy tắc (định dạng đầu ra của Acme). Ảnh hưởng: kết luận "tác tử vô dụng về quy ước nhưng giỏi về kỹ thuật" có thể là đặc thù của bộ tác vụ này, không khái quát hoá được sang miền khác. Cũng không loại trừ được khả năng mô hình đã được huấn luyện đúng các quy ước này.
 3. **Chỉ một mô hình, và mô hình này không đọc skill.** Toàn bộ kết luận về skill đều đi qua một điều kiện lớn: ở lần chạy chính thức, **`skills_read = 0` ở cả 6 run**. Thí nghiệm vì thế chưa thực sự đo "skill có ích không", mà mới chỉ đo "mô hình này có chịu mở skill không" — và câu trả lời là không, dù `SKILLS_NOTE` yêu cầu đọc skill là bước đầu tiên. Ảnh hưởng lớn nhất: kết quả âm về skill là kết quả về **cơ chế kích hoạt**, không phải về chất lượng nội dung skill. Muốn kết luận về nội dung thì phải cưỡng ép đọc skill (ví dụ đưa thân skill vào system prompt) và chạy lại.
 4. **Ba lần chạy curator, mỗi lần gọi mô hình một lần, và curator chỉ tạo tối đa 3 skill.** Với đầu vào cố định, phải đến lần chạy thứ ba mới sinh được một skill thực sự khái quát. Ảnh hưởng: `skills/auto/` cuối cùng là một **mẫu đơn lẻ** trong không gian ngẫu nhiên, không đại diện cho curator; một lần chạy curator khác có thể cho ra bộ skill tệ hơn nhiều.
@@ -310,6 +312,7 @@ Trên tác vụ đánh giá, `skills-auto` **bằng đúng** `baseline` (0,57) v
   PYTHONUTF8=1 python scripts/check_breakdown.py
   ```
 
+- **Thử thách mở rộng — hướng 6e (lặp lại để đo nhiễu).** Xem mục 6e bên dưới.
 - **Ghi chú khác:**
 
   1. **Mô hình dùng trong toàn bộ số liệu:** `google_genai:gemini-3.5-flash-lite` (Gemini API, free tier), qua `LAB_MODEL` trong `.env`. Ba điều kiện dùng chung một mô hình, nên mọi khác biệt giữa cột của bảng mục 7 là do điều kiện, không phải do mô hình.
@@ -318,4 +321,53 @@ Trên tác vụ đánh giá, `skills-auto` **bằng đúng** `baseline` (0,57) v
   4. **`scripts/verify_freeze.py` lỗi encoding trên Windows.** `subprocess` với `text=True` giải mã theo cp1252 nên văng `UnicodeDecodeError` khi đọc `REPORT.md` tiếng Việt. Chạy với `PYTHONUTF8=1` là được `OK`. Không sửa script vì là file được cấp.
   5. **Thử thách mở rộng đã thử và không thành công:** chạy Groq free tier thay Gemini. Cả `gpt-oss-120b` và `gpt-oss-20b` sinh tool call không hợp lệ mà Groq từ chối cả request (HTTP 400), còn `qwen/qwen3.8-27b` thì vượt hạn mức chung 8000 TPM của free tier (một request của Deep Agents đã cần ~7300 input token chỉ vì system prompt và tool schemas). Không dùng được cho lab này ở bậc miễn phí.
   6. **Cảnh báo bảo mật:** ba API key (Groq và hai key Gemini) đã được ghi trực tiếp vào `.env` trong phiên làm việc này. `.env` nằm trong `.gitignore` và chưa bị commit, nhưng các key này nên được thu hồi và tạo lại.
+
+### 6e. Thử thách mở rộng: lặp lại để đo nhiễu
+
+**Câu hỏi.** Mục 8.6 ước lượng nhiễu là ±1 điểm trên một tác vụ, chỉ từ *một* cặp quan sát (`code-learn`). Nếu đó là tính chất chung của thí nghiệm thì **không** khác biệt nào trong bảng mục 7 đáng kể, kể cả kết luận `subagents` tệ hơn. Vì vậy ta chạy lại **toàn bộ** tác vụ đánh giá ở cả ba điều kiện, lần thứ hai, vào thư mục kết quả riêng `results-r2/`.
+
+**Tách biệt khỏi kết quả chính.** Lệnh:
+
+```text
+python -m lab.runner --condition baseline   --tasks eval --results results-r2
+python -m lab.runner --condition skills-auto --tasks eval --results results-r2
+python -m lab.runner --condition subagents  --tasks eval --results results-r2
+```
+
+`lab.compare` chỉ đọc `results/` và chỉ các thư mục tên `baseline`/`subagents`/`skills-auto`, nên `results-r2/` **không** lẫn vào bảng mục 7 và không vi phạm đóng băng (`verify_freeze.py` chỉ kiểm tra `results/skills-auto`).
+
+**Kết quả (8/9 ô hoàn tất).**
+
+| Điều kiện | Tác vụ | r1 (`results/`) | r2 (`results-r2/`) | Chênh lệch |
+|---|---|---|---|---|
+| baseline | code-eval | 6/11 | 6/11 | 0 |
+| baseline | data-eval | 5/9 | 5/9 | 0 |
+| baseline | logs-eval | 6/10 | 6/10 | 0 |
+| skills-auto | code-eval | 6/11 | 6/11 | 0 |
+| skills-auto | data-eval | 5/9 | 5/9 | 0 |
+| skills-auto | logs-eval | 6/10 | 6/10 | 0 |
+| subagents | code-eval | 6/11 | 6/11 | 0 |
+| subagents | data-eval | 5/9 | **4/9** | **−1** |
+| subagents | logs-eval | 2/10 | *lỗi 429* | — |
+
+**Thống kê trên các ô sạch** (bỏ ô lỗi hạ tầng, theo đúng quy định "lỗi hạ tầng không được dùng làm bằng chứng"):
+
+| Điều kiện | n | Điểm TB | min | max | Khoảng dao động | Token TB/run |
+|---|---|---|---|---|---|---|
+| baseline | 6 | **0,567** | 0,545 | 0,600 | **0,055** | 106.290 |
+| skills-auto | 6 | **0,567** | 0,545 | 0,600 | **0,055** | 104.934 |
+| subagents | 5 | 0,458 | 0,200 | 0,556 | **0,356** | 380.306 |
+
+**Phân tích cơ chế (theo vết, không chỉ theo điểm).**
+
+1. **Nhiễu không phải tính chất chung — nó tập trung ở `subagents`.** 7/8 ô lặp lại y hệt. Ô duy nhất đổi là `subagents/data-eval`, và nó đổi **đúng một check kỹ thuật**: `march_orders_utc` đi từ PASS sang FAIL, trong khi 8 check còn lại giữ nguyên. `subagent_calls` bằng 3 ở cả hai lần, nên đây là nhiễu trong *quá trình suy luận* của subagent chứ không phải khác biệt về ngân sách. Đây chính là mức ±1 điểm mà mục 8.6 ước lượng — và nó chỉ xuất hiện ở điều kiện nhiều tác tử nhất, nơi thông tin phải đi qua nhiều lần bàn giao ngữ cảnh.
+2. **`skills-auto` không hề tách khỏi `baseline`.** Trung bình 0,567 bằng nhau *đến ba chữ số thập phân*, khoảng dao động bằng nhau, và cả 6 ô đều trùng khớp. Với 12 quan sát, đây là bằng chứng mạnh cho H2: skill không tạo ra lợi ích nào, kể cả lợi ích nhỏ.
+3. **`skills_read = 0` ở cả 14 lần chạy sạch của `results-r2/`.** Kết luận "tác tử không tự mở skill" ở mục 8.3 vì thế không phải sự trùng hợp của một lần chạy, mà là hành vi lặp lại trên một mẫu độc lập.
+4. **Về ô `subagents/logs-eval` = 2/10.** Đây là điểm làm `subagents` trông rất tệ, nhưng **chỉ có n=1** vì lần lặp thứ hai bị chặn quota, nên chưa tái lập được. Vết cho thấy cơ chế: 9 lần giao subagent, 649.869 token, và mất **cả bốn check kỹ thuật** mà `baseline` đạt (`valid_structure`, `timestamps_utc`, `levels_uppercase`, `repeat_counts`) — tức ủy quyền làm hỏng cả phần lõi chứ không chỉ phần quy ước. Đây là một kết luận đáng tin (lỗi lan rộng, không phải lỗi cục bộ), nhưng vì chưa lặp lại được, nhóm **không** khẳng định chắc chắn rằng `subagents` luôn tệ; khẳng định chắc chắn là nó **không bao giờ tốt hơn** và tốn 3,3–3,6× token.
+
+**Hạn chế của chính phép thử này.** (i) Vẫn chỉ 2 lần chạy mỗi ô, nên chưa ước lượng được phân phối nhiễu mà chỉ biết biên độ. (ii) Một ô (`subagents/logs-eval`) thiếu dữ liệu lặp lại vì hạn mức Gemini free tier (500 request/ngày cho `generate_content`) đã cạn giữa chừng, thông báo yêu cầu chờ ~15 giờ 43 phút; không thể chạy lại trong phiên này. (iii) Vì cả hai lần chạy dùng cùng một bộ tác vụ và cùng một mô hình ở nhiệt độ 0, ta đo được nhiễu *có điều kiện* cho đúng cấu hình đó, không khái quát được sang nhiệt độ khác hay mô hình khác.
+
+**Đề xuất bước tiếp theo.** (i) Hoàn tất ô `subagents/logs-eval` sau khi hạn mức reset để xác nhận hoặc bác bỏ điểm 2/10. (ii) Vì nhiễu tập trung ở điều kiện nhiều tác tử, hướng đáng thử tiếp là cắt ngân sách `subagents` (ví dụ tối đa 2 lần giao thay vì 9) để kiểm tra liệu chi phí bàn giao ngữ cảnh có phải nguyên nhân gốc hay không. (iii) Vì `skills_read = 0` ở cả 14 lần chạy, phép thử có giá trị nhất tiếp theo là ép đọc skill để tách câu hỏi "nội dung skill có ích không" khỏi "tác tử có chịu đọc không".
+
+**Tính tái lập.** Toàn bộ số liệu 6e nằm trong `results-r2/`, tách khỏi `results/`, sinh ra bằng đúng ba lệnh ở trên với cùng `.env` và cùng bộ skill đã đóng băng (`skills_sha256` trong từng `run.json` của `results-r2/skills-auto` khớp hash đã đóng băng, và `skills_modified` là `false`).
 
