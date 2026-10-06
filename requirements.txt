@@ -1,0 +1,19 @@
+# Thư viện cần cài cho bài lab (đồng bộ với pyproject.toml)
+# Cài: pip install -r requirements.txt
+# hoặc: pip install -e .  (dùng dependencies trong pyproject.toml)
+
+# --- Agent framework ---
+deepagents==0.7.21
+
+# --- LangChain ---
+langchain-core>=1.0
+langchain>=1.0
+langchain-openai>=1.0
+langchain-google-genai>=2.0
+langchain-deepseek>=1.1
+
+# --- Cấu hình môi trường (.env) ---
+python-dotenv>=1.0
+
+# --- Test ---
+pytest>=8.0
